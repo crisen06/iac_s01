@@ -3,6 +3,6 @@ output "policy_name" {
 }
 
 output "role_name" {
-  value = azurerm_storage_account.sa_utec.primary_blob_endpoint
+  value = aws_iam_role.test_role.name
 }
 

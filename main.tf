@@ -1,22 +1,17 @@
 terraform {
   required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "~> 3.0"
+    aws = {
+      source  = "hashicorp/aws"
+      version = "6.44.0"
     }
   }
-  required_version = ">= 1.5.0"
 }
 
-provider "azurerm" {
-  features {}
-  skip_provider_registration = true
+provider "aws" {
+  # Configuration options
 }
 
-# Referencia al RG existente del alumno
-data "azurerm_resource_group" "utec_rg" {
-  name = var.resource_group_name
-}
+
 
 # Storage Account con nombre único global (máx 24 chars)
 resource "azurerm_storage_account" "sa_utec" {
@@ -38,8 +33,42 @@ resource "azurerm_storage_account" "sa_utec" {
   }
 }
 
-resource "azurerm_storage_container" "contenedor" {
-  name                  = var.container_name
-  storage_account_name  = azurerm_storage_account.sa_utec.name
-  container_access_type = "private"
+#Role IAM + policy
+
+resource "aws_iam_role_policy" "test_policy" {
+  name = "policyutec${var.student_name}"
+  role = aws_iam_role.roleutec${var.student_name}.id
+
+  # Terraform's "jsonencode" function converts a
+  # Terraform expression result to valid JSON syntax.
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = [
+          "ec2:Describe*",
+        ]
+        Effect   = "Allow"
+        Resource = "*"
+      },
+    ]
+  })
+}
+
+resource "aws_iam_role" "test_role" {
+  name = "roleutec${var.student_name}"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Sid    = ""
+        Principal = {
+          Service = "ec2.amazonaws.com"
+        }
+      },
+    ]
+  })
 }

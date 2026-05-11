@@ -1,5 +1,5 @@
-output "aws_iam_role_policy" {
-  
+output "policy_name" {
+  value = test_policy
 }
 
 output "blob_endpoint" {

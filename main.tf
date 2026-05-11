@@ -15,7 +15,7 @@ provider "aws" {
 
 resource "aws_iam_role_policy" "test_policy" {
   name = "policyutec${var.student_name}"
-  role = aws_iam_role.roleutec${var.student_name}.id
+  role = aws_iam_role.test_role.id
 
   # Terraform's "jsonencode" function converts a
   # Terraform expression result to valid JSON syntax.

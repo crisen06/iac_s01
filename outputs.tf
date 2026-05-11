@@ -1,5 +1,5 @@
 output "policy_name" {
-  value = test_policy
+  value = aws_iam_role_policy.test_policy.name
 }
 
 output "blob_endpoint" {

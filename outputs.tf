@@ -1,5 +1,5 @@
-output "storage_account_name" {
-  value = azurerm_storage_account.sa_utec.name
+output "aws_iam_role_policy" {
+  
 }
 
 output "blob_endpoint" {

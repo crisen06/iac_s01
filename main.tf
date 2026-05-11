@@ -11,28 +11,6 @@ provider "aws" {
   # Configuration options
 }
 
-
-
-# Storage Account con nombre único global (máx 24 chars)
-resource "azurerm_storage_account" "sa_utec" {
-  # Ejemplo: sautecjose01
-  name                     = "sautec${var.student_name}${var.student_id}"
-  resource_group_name      = data.azurerm_resource_group.utec_rg.name
-  location                 = data.azurerm_resource_group.utec_rg.location
-  account_tier             = "Standard"
-  account_replication_type = "LRS"
-
-  blob_properties {
-    versioning_enabled = true
-  }
-
-  tags = {
-    Entorno = "Laboratorio"
-    Curso   = "Arquitectura Multinube"
-    Alumno  = var.student_name
-  }
-}
-
 #Role IAM + policy
 
 resource "aws_iam_role_policy" "test_policy" {
